@@ -15,18 +15,20 @@ func BuildSwatches(app *AppInit) *fyne.Container {
 	// Capacity of app.Swatches
 	for i := 0; i < cap(app.Swatches); i++ {
 		initialColor := color.NRGBA{R: 255, G: 255, B: 255, A: 255}
-		s := swatch.NewSwatch(app.State, initialColor, i, func(s *swatch.Swatch) {
-			// Remove any selection in app.Swatches
-			for j := 0; j < len(app.Swatches); j++ {
-				app.Swatches[j].Selected = false
-				app.Swatches[j].Refresh()
-			}
-			// Highlight the selected swatch
-			app.State.SwatchSelected = s.SwatchIndex
-			// Paint with the color
-			app.State.BrushColor = s.Color
-		})
-		// Select the zero index swatch to be selected
+		s := swatch.NewSwatch(app.State, initialColor, i,
+			// Click handler
+			func(s *swatch.Swatch) {
+				// Remove any selection in app.Swatches
+				for j := 0; j < len(app.Swatches); j++ {
+					app.Swatches[j].Selected = false
+					app.Swatches[j].Refresh()
+				}
+				// Highlight the selected swatch
+				app.State.SwatchSelected = s.SwatchIndex
+				// Paint with the color
+				app.State.BrushColor = s.Color
+			})
+		// Select the first swatch to be selected
 		if i == 0 {
 			s.Selected = true
 			app.State.SwatchSelected = 0
